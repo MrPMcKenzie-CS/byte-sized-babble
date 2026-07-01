@@ -442,17 +442,6 @@
                 opacity: 1;
             }
         }
-
-        .spec-link {
-            color: #667eea;
-            font-weight: 600;
-            text-decoration: none;
-            cursor: pointer;
-        }
-
-        .spec-link:hover {
-            text-decoration: underline;
-        }
     </style>
 </head>
 <body>
@@ -553,20 +542,18 @@
 
         <!-- CENTER CONTENT -->
         <div class="center-content">
-            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300'%3E%3Crect fill='%23f0f0f0' width='400' height='300'/%3E%3Ctext x='50%25' y='50%25' font-size='24' fill='%23999' text-anchor='middle' dominant-baseline='middle'%3EYour Byte Sized Babble Image Here%3C/text%3E%3C/svg%3E" alt="Byte Sized Babble" class="welcome-image" style="max-width: 100%; height: 250px;">
-            
             <div class="welcome-section">
                 <h1>Welcome to Byte Sized Babble 🎙️</h1>
                 <div class="welcome-message">
-                    <p>Hello! We're <span class="teacher-names">Kathryn and Phill</span>, experienced Computer Science and iMedia teachers. We've created this one-stop resource to support your GCSE Computer Science, A Level Computer Science, and Creative iMedia studies.</p>
-                    <p style="margin-top: 15px;">Whether you're revising for exams, working on coursework, or just trying to understand difficult concepts, Byte Sized Babble is here to guide you every step of the way. Our carefully curated resources, weekly podcast episodes, and interactive AI assistant Byte will help you master these subjects with confidence.</p>
+                    <p>Hello! We're <span class="teacher-names">Kathryn and Phill</span>, experienced Computer Science and iMedia teachers. We've created this one-stop resource to support your GCSE, A Level, and Cambridge National revision.</p>
+                    <p style="margin-top: 15px;">Whether you're revising for exams, working on coursework, or just trying to understand difficult concepts, Byte Sized Babble is here to guide you every step of the way!</p>
                 </div>
             </div>
 
             <!-- PODCAST SECTION -->
             <div class="podcast-section">
                 <h2>🎧 Weekly Podcast</h2>
-                <p>Subscribe to our weekly podcast where we break down complex concepts into bite-sized episodes. Each week we cover exam techniques, common misconceptions, real-world applications, and student questions.</p>
+                <p>Subscribe to our weekly podcast where we break down complex concepts into bite-sized episodes. Each week we cover exam techniques, common misconceptions, and real-world applications.</p>
                 
                 <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 15px;">
                     <p style="color: #999; text-align: center; font-style: italic;">Subscribe on your favourite platform to never miss an episode:</p>
@@ -593,7 +580,7 @@
             <div class="chat-messages" id="chatMessages">
                 <div class="message bot">
                     <div class="message-bubble">
-                        👋 Hi! I'm Byte, your AI learning assistant. I'm here to help you understand Computer Science and iMedia concepts using the actual exam specifications. I know the exact topics for GCSE (AQA, Edexcel, OCR), A Level OCR H446, and Creative iMedia R093. Ask me about anything from your specification! What exam are you studying for?
+                        👋 Hi! I'm Byte, your AI learning assistant. I'm here to help you understand Computer Science and iMedia concepts. Feel free to ask me questions about any topic!
                     </div>
                 </div>
             </div>
@@ -619,125 +606,22 @@
                 const accordionItem = header.parentElement;
                 const isActive = accordionItem.classList.contains('active');
                 
+                // Close all accordion items
                 document.querySelectorAll('.accordion-item').forEach(item => {
                     item.classList.remove('active');
                 });
                 
+                // Open clicked item if it wasn't active
                 if (!isActive) {
                     accordionItem.classList.add('active');
                 }
             });
         });
 
-        // ============ COMPREHENSIVE EXAM SPECIFICATIONS DATABASE ============
-        const examSpecifications = {
-            'r093': {
-                name: 'OCR R093 - Creative iMedia Theory Exam',
-                examBoard: 'OCR',
-                level: 'Cambridge National',
-                duration: '1 hour 30 minutes',
-                marks: '70 marks',
-                percentage: '40% of final grade',
-                topics: [
-                    '📺 The Media Industry (traditional vs new media, sectors, job roles)',
-                    '🎯 Factors Influencing Product Design (purpose, audience, research methods)',
-                    '👥 Audience Analysis (demographics, segmentation, psychographics)',
-                    '🎨 Media Codes (camera, colour, graphics, typography, mise-en-scène)',
-                    '📋 Pre-production Planning (workplans, mood boards, storyboards, wireframes)',
-                    '⚖️ Legal & Ethical Issues (data protection, copyright, privacy, health & safety)',
-                    '📤 Distribution of Media Products (platforms, file formats, delivery methods)'
-                ],
-                assessmentObjectives: 'PO1: Recall knowledge | PO2: Apply knowledge | PO3: Analyse & Evaluate',
-                keyTips: 'Context-based answers, use technical terminology, scenario analysis'
-            },
-            'h446': {
-                name: 'OCR H446 - A Level Computer Science',
-                examBoard: 'OCR',
-                level: 'A Level',
-                components: '3 components',
-                percentage: '40% Paper 1 (Computer Systems), 40% Paper 2 (Algorithms), 20% Project',
-                topics: [
-                    '🖥️ Component 1: Computer Systems (processors, storage, networks, databases, security)',
-                    '💻 Component 2: Algorithms & Programming (computational thinking, sorting, searching)',
-                    '🔧 Component 3: Programming Project (analysis, design, development, evaluation)',
-                    '🌐 1.3 Exchanging Data (compression, encryption, hashing, networks, web tech)',
-                    '📊 1.4 Data Structures (arrays, linked lists, stacks, queues, trees, graphs)',
-                    '⚖️ 1.5 Legal, Moral & Ethical Issues'
-                ],
-                assessmentObjectives: 'Knowledge recall, application, analysis, programming skills',
-                keyTips: 'Understand architecture, Big O notation, practice coding in Python'
-            },
-            'gcse_aqa': {
-                name: 'GCSE Computer Science - AQA (8525)',
-                examBoard: 'AQA',
-                level: 'GCSE',
-                papers: '2 written exams, 1 hour 30 mins each',
-                marks: '50% each paper',
-                topics: [
-                    '🎲 Algorithms (design, implementation, efficiency)',
-                    '💻 Programming (Python, code analysis, design)',
-                    '💾 Data Representation (binary, hexadecimal, encoding)',
-                    '🖥️ Computer Systems (hardware, software, operating systems)',
-                    '🌐 Computer Networks (protocols, security, cyber threats)',
-                    '🔐 Cyber Security (threats, protection, legislation)',
-                    '📊 Relational Databases & SQL'
-                ],
-                assessmentObjectives: 'Paper 1: Programming Skills | Paper 2: Computing Concepts',
-                keyTips: 'Strong programming knowledge essential, learn all algorithms'
-            },
-            'gcse_edexcel': {
-                name: 'GCSE Computer Science - Edexcel (1CP2)',
-                examBoard: 'Edexcel (Pearson)',
-                level: 'GCSE',
-                papers: '2 exams (1 written, 1 onscreen practical)',
-                marks: '50% each',
-                topics: [
-                    '🎯 Fundamental Principles of Computer Science',
-                    '💻 Programming (design, evaluation, computational abstraction)',
-                    '💾 Data Representation',
-                    '🖥️ Computer Systems & Networks',
-                    '🔐 Cyber Security',
-                    '⚖️ Impact of Digital Technology'
-                ],
-                assessmentObjectives: 'Paper 1: Principles | Paper 2: Practical onscreen coding',
-                keyTips: 'Practical coding exam is important, focus on problem-solving'
-            },
-            'gcse_ocr': {
-                name: 'GCSE Computer Science - OCR (J277)',
-                examBoard: 'OCR',
-                level: 'GCSE',
-                papers: '2 written exams, 1 hour 30 mins each',
-                marks: '50% each',
-                topics: [
-                    '🖥️ Computer Systems (architecture, memory, storage, networks)',
-                    '🔐 Cyber Security & Legislation',
-                    '🎲 Computational Thinking & Algorithms',
-                    '💻 Programming (design, algorithms, data)',
-                    '💾 Data Representation',
-                    '🌐 Networks & Protocols'
-                ],
-                assessmentObjectives: 'Paper 1: Computer Systems | Paper 2: Computational Thinking & Programming',
-                keyTips: 'Understand systems architecture, practice algorithms'
-            }
-        };
-
         // ============ CHATBOT FUNCTIONALITY ============
         const chatInput = document.getElementById('chatInput');
         const sendBtn = document.getElementById('sendBtn');
         const chatMessages = document.getElementById('chatMessages');
-
-        function identifyExam(message) {
-            const lower = message.toLowerCase();
-            
-            if (lower.includes('r093') || lower.includes('imedia')) return 'r093';
-            if (lower.includes('h446') || (lower.includes('a level') && lower.includes('computer'))) return 'h446';
-            if (lower.includes('gcse') && lower.includes('aqa')) return 'gcse_aqa';
-            if (lower.includes('gcse') && lower.includes('edexcel')) return 'gcse_edexcel';
-            if (lower.includes('gcse') && lower.includes('ocr')) return 'gcse_ocr';
-            if (lower.includes('gcse') && lower.includes('computer')) return 'gcse_general';
-            
-            return null;
-        }
 
         function addMessage(text, isUser = false) {
             const messageDiv = document.createElement('div');
@@ -745,7 +629,7 @@
             
             const bubbleDiv = document.createElement('div');
             bubbleDiv.className = 'message-bubble';
-            bubbleDiv.innerHTML = text;
+            bubbleDiv.textContent = text;
             
             messageDiv.appendChild(bubbleDiv);
             chatMessages.appendChild(messageDiv);
@@ -773,163 +657,42 @@
             }
         }
 
-        async function getByteResponse(userMessage) {
-            const lowerMessage = userMessage.toLowerCase();
-
-            // Check for coursework/homework help
-            if (lowerMessage.includes('coursework') || lowerMessage.includes('homework') || lowerMessage.includes('assignment')) {
-                return {
-                    response: "<strong>📝 Coursework Support</strong><br><br>I'll help guide you through coursework without writing it for you:<br>✓ Understand the requirements<br>✓ Suggest approaches & methodologies<br>✓ Review your reasoning<br>✓ Point out areas to develop<br><br>What part of your coursework are you working on?",
-                    examples: null
-                };
-            }
-
-            // Check for answer verification
-            if (lowerMessage.includes('is this correct') || lowerMessage.includes('is my answer') || 
-                lowerMessage.includes('did i get this right') || lowerMessage.includes('check my answer')) {
-                return {
-                    response: "<strong>✓ Answer Checking</strong><br><br>I'd be happy to help you verify your understanding! Share your answer and I'll:<br>• Guide you through the reasoning<br>• Ask questions to test your understanding<br>• Suggest areas to explore further<br><br>Please share your answer!",
-                    examples: null
-                };
-            }
-
-            // Identify which exam they're asking about
-            const examType = identifyExam(userMessage);
-            
-            if (examType) {
-                const spec = examSpecifications[examType];
-                
-                if (examType === 'r093') {
-                    return {
-                        response: `<strong>📺 ${spec.name}</strong><br><br>` +
-                                `<strong>Exam Details:</strong><br>` +
-                                `• Duration: ${spec.duration}<br>` +
-                                `• Total Marks: ${spec.marks}<br>` +
-                                `• Worth: ${spec.percentage}<br>` +
-                                `• Assessment: ${spec.assessmentObjectives}<br><br>` +
-                                `<strong>Main Topics You Need to Know:</strong><br>` +
-                                spec.topics.slice(0, 4).join('<br>') + `<br><br>` +
-                                `<strong>💡 Key Tip:</strong> ${spec.keyTips}<br><br>` +
-                                `What specific topic would you like to explore? (e.g., media codes, audience analysis, pre-production planning)`,
-                        examples: null
-                    };
-                } else if (examType === 'h446') {
-                    return {
-                        response: `<strong>💻 ${spec.name}</strong><br><br>` +
-                                `<strong>Assessment Structure:</strong><br>` +
-                                `• ${spec.components}<br>` +
-                                `• Paper 1 (Computer Systems): 40%<br>` +
-                                `• Paper 2 (Algorithms & Programming): 40%<br>` +
-                                `• Programming Project: 20%<br><br>` +
-                                `<strong>Key Specification Areas:</strong><br>` +
-                                spec.topics.slice(0, 4).join('<br>') + `<br><br>` +
-                                `<strong>💡 Key Tip:</strong> ${spec.keyTips}<br><br>` +
-                                `Which component would you like to focus on? (Systems, Algorithms, or Project)`,
-                        examples: null
-                    };
-                } else if (examType === 'gcse_general') {
-                    return {
-                        response: `<strong>📚 GCSE Computer Science</strong><br><br>` +
-                                `I can help you with any exam board! Which one are you studying?<br><br>` +
-                                `• <strong>AQA (8525)</strong> - 2 written exams<br>` +
-                                `• <strong>Edexcel/Pearson (1CP2)</strong> - 1 written + 1 onscreen practical<br>` +
-                                `• <strong>OCR (J277)</strong> - 2 written exams<br><br>` +
-                                `Let me know your exam board and I can give you specific topics!`,
-                        examples: null
-                    };
-                } else {
-                    const spec = examSpecifications[examType];
-                    return {
-                        response: `<strong>📚 ${spec.name}</strong><br><br>` +
-                                `<strong>Exam Info:</strong><br>` +
-                                `• Board: ${spec.examBoard}<br>` +
-                                `• Format: ${spec.papers}<br>` +
-                                `• Each paper: ${spec.marks}<br><br>` +
-                                `<strong>Topics to Study:</strong><br>` +
-                                spec.topics.slice(0, 4).join('<br>') + `<br><br>` +
-                                `<strong>💡 Key Tip:</strong> ${spec.keyTips}<br><br>` +
-                                `Which topic would you like help with?`,
-                        examples: null
-                    };
-                }
-            }
-
-            // If no specific exam mentioned, ask for clarification
-            if (lowerMessage.includes('help') || lowerMessage.includes('revision') || lowerMessage.includes('study')) {
-                return {
-                    response: `<strong>📖 Welcome to Your Revision Session!</strong><br><br>` +
-                            `I'm here to help! To give you the most relevant guidance, please tell me:<br><br>` +
-                            `<strong>Which exam are you studying for?</strong><br>` +
-                            `• 📺 R093 (OCR Creative iMedia theory)<br>` +
-                            `• 💻 H446 (OCR A Level Computer Science)<br>` +
-                            `• 📚 GCSE Computer Science (AQA/Edexcel/OCR)<br><br>` +
-                            `Or just tell me what topic you're stuck on! 😊`,
-                    examples: null
-                };
-            }
-
-            // For specific topics, provide guidance
-            if (lowerMessage.includes('network') || lowerMessage.includes('algorithm') || 
-                lowerMessage.includes('data') || lowerMessage.includes('programming')) {
-                return {
-                    response: `<strong>🎯 Topic Help</strong><br><br>` +
-                            `That's a great topic to explore! To help you best, let me know:<br><br>` +
-                            `1. <strong>Which exam are you studying for?</strong><br>` +
-                            `   (R093, H446, or GCSE?)<br><br>` +
-                            `2. <strong>What specific aspect?</strong><br>` +
-                            `   (For networks: TCP/IP, DNS, security?)<br>` +
-                            `   (For algorithms: sorting, searching, complexity?)<br><br>` +
-                            `This will help me give you specification-focused guidance! 📝`,
-                    examples: null
-                };
-            }
-
-            // Default helpful response
-            return {
-                response: `<strong>👋 Hi there!</strong><br><br>` +
-                        `I'm Byte, and I know the exact content for:<br>` +
-                        `• 📺 <strong>R093</strong> (OCR Creative iMedia theory exam)<br>` +
-                        `• 💻 <strong>H446</strong> (OCR A Level Computer Science)<br>` +
-                        `• 📚 <strong>GCSE Computer Science</strong> (AQA, Edexcel, OCR)<br><br>` +
-                        `Try asking me about:<br>` +
-                        `"Help me revise for R093"<br>` +
-                        `"What's in the H446 specification?"<br>` +
-                        `"Explain data representation for GCSE"<br><br>` +
-                        `What would you like to learn? 📚`,
-                examples: null
-            };
-        }
-
         async function sendMessage() {
             const message = chatInput.value.trim();
             
             if (message === '') return;
             
-            addMessage(message, true);
-            chatInput.value = '';
+            // Disable send button during request
             sendBtn.disabled = true;
             
+            // Add user message
+            addMessage(message, true);
+            chatInput.value = '';
+            
+            // Show typing indicator
             addTypingIndicator();
             
             try {
-                // Simulate a short delay for realism
-                await new Promise(resolve => setTimeout(resolve, 800));
-                
-                const { response, examples } = await getByteResponse(message);
-                
-                removeTypingIndicator();
-                addMessage(response);
-                
-                if (examples && examples.length > 0) {
-                    setTimeout(() => {
-                        const randomExample = examples[Math.floor(Math.random() * examples.length)];
-                        addMessage(randomExample);
-                    }, 500);
+                // Call secure backend function
+                const response = await fetch('/.netlify/functions/chat', {
+                    method: 'POST',
+                    body: JSON.stringify({ message: message })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to get response');
                 }
-            } catch (error) {
-                console.error('Error:', error);
+
                 removeTypingIndicator();
-                addMessage("Sorry, I encountered an error. Please try again!");
+                
+                const data = await response.json();
+                const reply = data.reply || 'Sorry, I couldn\'t generate a response. Please try again.';
+                
+                addMessage(reply);
+            } catch (error) {
+                removeTypingIndicator();
+                console.error('Error:', error);
+                addMessage('Sorry, there was an error processing your request. Please make sure the API token is configured.');
             } finally {
                 sendBtn.disabled = false;
                 chatInput.focus();
@@ -943,8 +706,11 @@
             }
         });
 
+        // Set initial focus on chat input
         chatInput.focus();
-        console.log('Byte Sized Babble loaded with full specification database!');
+
+        // Log that page has loaded
+        console.log('Byte Sized Babble loaded successfully!');
     </script>
 </body>
 </html>
