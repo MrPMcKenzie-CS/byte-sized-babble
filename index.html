@@ -295,7 +295,7 @@
             padding: 10px 15px;
             border-radius: 12px;
             font-size: 14px;
-            line-height: 1.4;
+            line-height: 1.5;
             word-wrap: break-word;
         }
 
@@ -352,6 +352,11 @@
 
         .send-btn:active {
             transform: translateY(0);
+        }
+
+        .send-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
         }
 
         /* ============ SCROLLBAR STYLING ============ */
@@ -436,6 +441,17 @@
             40% {
                 opacity: 1;
             }
+        }
+
+        .source-link {
+            color: #667eea;
+            text-decoration: underline;
+            cursor: pointer;
+            margin: 0 2px;
+        }
+
+        .source-link:hover {
+            color: #764ba2;
         }
     </style>
 </head>
@@ -577,7 +593,7 @@
             <div class="chat-messages" id="chatMessages">
                 <div class="message bot">
                     <div class="message-bubble">
-                        👋 Hi! I'm Byte, your AI learning assistant. I'm here to help you understand Computer Science and iMedia concepts. Feel free to ask me questions about any topic! Remember: I won't give you direct answers to exam questions, but I'll guide you to understand the concepts and help you find the answer yourself. What would you like to learn about today?
+                        👋 Hi! I'm Byte, your AI learning assistant. I'm here to help you understand Computer Science and iMedia concepts. Feel free to ask me anything about GCSE, A Level Computer Science, or Creative iMedia! I'll search the internet for the most current information to guide you. Remember: I won't give you direct answers to exam questions, but I'll guide you to understand the concepts and help you find the answer yourself. What would you like to learn about today?
                     </div>
                 </div>
             </div>
@@ -620,72 +636,30 @@
         const sendBtn = document.getElementById('sendBtn');
         const chatMessages = document.getElementById('chatMessages');
 
-        // Sample knowledge base for guidance
-        const knowledgeBase = {
-            'python': {
-                guidance: 'Python is a versatile programming language commonly used in computer science education. What specific aspect would you like to understand? For example: variables, loops, functions, or object-oriented programming?',
-                examples: [
-                    'Example 1: Using a for loop to iterate through numbers from 1 to 10',
-                    'Example 2: Creating a function to calculate the sum of two numbers'
-                ]
-            },
-            'algorithm': {
-                guidance: 'Algorithms are step-by-step procedures to solve a problem. Can you describe what problem you\'re trying to solve? That will help me guide you to understand the right approach.',
-                examples: [
-                    'Example: Binary search algorithm for finding elements in a sorted list',
-                    'Example: Bubble sort algorithm for arranging numbers in order'
-                ]
-            },
-            'data structure': {
-                guidance: 'Data structures are ways to organize and store data efficiently. Common ones include arrays, linked lists, stacks, and queues. Which one would you like to explore?',
-                examples: [
-                    'Example: Using an array to store a list of student names',
-                    'Example: Using a stack data structure to implement an undo function'
-                ]
-            },
-            'network': {
-                guidance: 'Computer networks allow devices to communicate. Let me guide you through the key concepts. Are you interested in: TCP/IP protocols, DNS, HTTP, or security?',
-                examples: [
-                    'Example: How data travels from your computer to a web server',
-                    'Example: How DNS translates domain names to IP addresses'
-                ]
-            },
-            'security': {
-                guidance: 'Cybersecurity is crucial in today\'s digital world. What aspect interests you? Encryption, authentication, firewalls, or common threats?',
-                examples: [
-                    'Example: How encryption protects your passwords',
-                    'Example: How two-factor authentication adds extra security'
-                ]
-            },
-            'design': {
-                guidance: 'Design principles in iMedia help create engaging user experiences. Are you interested in: layout, color theory, typography, or user interface design?',
-                examples: [
-                    'Example: How to use the rule of thirds in composition',
-                    'Example: Color psychology in website design'
-                ]
-            },
-            'html': {
-                guidance: 'HTML is the structure of web pages. What would you like to understand? Tags, elements, semantic HTML, or how to structure a page?',
-                examples: [
-                    'Example: Creating headings, paragraphs, and lists with HTML tags',
-                    'Example: Understanding semantic tags like <header>, <nav>, <article>'
-                ]
-            },
-            'css': {
-                guidance: 'CSS is used to style web pages. Are you interested in: selectors, properties, layouts, or responsive design?',
-                examples: [
-                    'Example: Using CSS to center text and change colors',
-                    'Example: Creating responsive layouts with CSS Flexbox or Grid'
-                ]
-            },
-            'default': {
-                guidance: 'Great question! To help guide you better, could you provide more details about what you\'re trying to understand? Are you working on GCSE, A Level, or iMedia coursework?',
-                examples: [
-                    'Try asking about specific topics from the menu on the left',
-                    'Describe the problem or concept you\'re struggling with'
-                ]
+        // Backend API endpoint (using a simple proxy or your own backend)
+        const API_ENDPOINT = 'https://api.bing.microsoft.com/v7.0/search';
+
+        async function searchInternet(query) {
+            try {
+                // Using a CORS proxy service since direct API calls from browser are restricted
+                const corsProxyUrl = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(
+                    'https://www.bing.com/search?q=' + encodeURIComponent(query)
+                );
+
+                const response = await fetch(corsProxyUrl);
+                const html = await response.text();
+
+                // Extract text content from HTML
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+                const textContent = doc.body.innerText;
+
+                return textContent.substring(0, 2000); // Limit response length
+            } catch (error) {
+                console.log('Internet search failed, using fallback', error);
+                return null;
             }
-        };
+        }
 
         function addMessage(text, isUser = false) {
             const messageDiv = document.createElement('div');
@@ -693,7 +667,7 @@
             
             const bubbleDiv = document.createElement('div');
             bubbleDiv.className = 'message-bubble';
-            bubbleDiv.textContent = text;
+            bubbleDiv.innerHTML = text; // Use innerHTML to support formatting
             
             messageDiv.appendChild(bubbleDiv);
             chatMessages.appendChild(messageDiv);
@@ -721,35 +695,80 @@
             }
         }
 
-        function getByteResponse(userMessage) {
+        async function getByteResponse(userMessage) {
             const lowerMessage = userMessage.toLowerCase();
+
+            // Check for coursework/homework help
+            if (lowerMessage.includes('coursework') || lowerMessage.includes('homework') || lowerMessage.includes('assignment')) {
+                return {
+                    response: "I'd love to help with your coursework! However, I won't write it for you - that wouldn't help you learn. Instead, I can:<br>✓ Guide you through the concepts<br>✓ Help you understand the requirements<br>✓ Suggest similar examples<br>✓ Point you in the right direction<br><br>What specific part are you working on?",
+                    examples: null
+                };
+            }
+
+            // Check for answer verification
+            if (lowerMessage.includes('is this correct') || lowerMessage.includes('is my answer') || 
+                lowerMessage.includes('did i get this right') || lowerMessage.includes('check my answer')) {
+                return {
+                    response: "I'd be happy to help you check your understanding! Please share your answer, and I'll guide you through the reasoning to verify if you're on the right track. Remember, I'm here to help you learn, not just give answers.",
+                    examples: null
+                };
+            }
+
+            // For exam papers and specific topics - build a contextual query
+            let searchQuery = userMessage;
             
-            // Check which knowledge area matches
-            let response = knowledgeBase.default.guidance;
-            let examples = knowledgeBase.default.examples;
-            
-            for (const [key, value] of Object.entries(knowledgeBase)) {
-                if (key !== 'default' && lowerMessage.includes(key)) {
-                    response = value.guidance;
-                    examples = value.examples;
-                    break;
+            // Enhance query for specific exam papers
+            if (lowerMessage.includes('r093')) {
+                searchQuery = 'OCR R093 Creative iMedia theory exam revision guide';
+            } else if (lowerMessage.includes('h046') || lowerMessage.includes('h446')) {
+                searchQuery = 'OCR A Level Computer Science H446 revision guide';
+            } else if (lowerMessage.includes('gcse')) {
+                searchQuery = userMessage + ' GCSE Computer Science';
+            } else if (lowerMessage.includes('imedia') || lowerMessage.includes('imedia')) {
+                searchQuery = userMessage + ' OCR Creative iMedia';
+            }
+
+            // Search the internet for information
+            const searchResults = await searchInternet(searchQuery);
+
+            if (searchResults) {
+                // Process and format the search results
+                let response = `<strong>Here's what I found about "${userMessage}":</strong><br><br>`;
+                
+                // Extract key information from search results
+                const sentences = searchResults.split(/[.!?]+/).filter(s => s.trim().length > 0);
+                const relevantSentences = sentences.slice(0, 5); // Get first 5 relevant sentences
+                
+                if (relevantSentences.length > 0) {
+                    response += relevantSentences.map(s => s.trim()).join('.<br>') + '.<br><br>';
+                } else {
+                    response = `I searched the internet for information about "${userMessage}" but didn't find specific details. Let me guide you:<br><br>`;
                 }
+
+                // Add guiding questions
+                response += `<strong>To help you better:</strong><br>`;
+                response += `• Can you tell me more about what specific aspect you're struggling with?<br>`;
+                response += `• Are you preparing for an exam or working on coursework?<br>`;
+                response += `• What have you already tried to understand about this topic?<br><br>`;
+                response += `I'm here to guide you to the understanding, not just provide answers!`;
+
+                return { response, examples: null };
+            } else {
+                // Fallback response when internet search fails
+                let response = `I couldn't find information online for "${userMessage}", but let me guide you:<br><br>`;
+                response += `<strong>Key tips for learning this topic:</strong><br>`;
+                response += `1. Check your exam board specification (OCR, AQA, Edexcel, etc.)<br>`;
+                response += `2. Review your textbook or class notes<br>`;
+                response += `3. Try breaking the topic into smaller concepts<br>`;
+                response += `4. Use past papers to see how questions are asked<br><br>`;
+                response += `Can you tell me more about what specific part you need help with? I'll try to guide you through it step by step.`;
+
+                return { response, examples: null };
             }
-            
-            // Check for answer verification keywords
-            if (lowerMessage.includes('is this correct') || lowerMessage.includes('is my answer') || lowerMessage.includes('did i get this right')) {
-                response = 'I\'d be happy to help you check your understanding! Please share your answer, and I\'ll guide you through the reasoning to verify if you\'re on the right track. Remember, I\'m here to help you learn, not just give answers.';
-            }
-            
-            // Check for coursework help
-            if (lowerMessage.includes('coursework') || lowerMessage.includes('homework')) {
-                response = 'I\'d love to help with your coursework! However, I won\'t write it for you - that wouldn\'t help you learn. Instead, I can: guide you through the concepts, help you understand the requirements, suggest similar examples, and point you in the right direction. What specific part are you working on?';
-            }
-            
-            return { response, examples };
         }
 
-        function sendMessage() {
+        async function sendMessage() {
             const message = chatInput.value.trim();
             
             if (message === '') return;
@@ -757,30 +776,41 @@
             // Add user message
             addMessage(message, true);
             chatInput.value = '';
+            sendBtn.disabled = true;
             
             // Show typing indicator
             addTypingIndicator();
             
-            // Simulate API call delay
-            setTimeout(() => {
+            try {
+                // Get response from Byte (now with internet search)
+                const { response, examples } = await getByteResponse(message);
+                
+                // Remove typing indicator
                 removeTypingIndicator();
                 
-                const { response, examples } = getByteResponse(message);
+                // Add bot response
                 addMessage(response);
                 
-                // Add example after a short delay
-                setTimeout(() => {
-                    if (examples && examples.length > 0) {
+                // Add examples if available
+                if (examples && examples.length > 0) {
+                    setTimeout(() => {
                         const randomExample = examples[Math.floor(Math.random() * examples.length)];
                         addMessage(randomExample);
-                    }
-                }, 500);
-            }, 1000);
+                    }, 500);
+                }
+            } catch (error) {
+                console.error('Error getting response:', error);
+                removeTypingIndicator();
+                addMessage("Sorry, I encountered an error while processing your question. Please try again!");
+            } finally {
+                sendBtn.disabled = false;
+                chatInput.focus();
+            }
         }
 
         sendBtn.addEventListener('click', sendMessage);
         chatInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
+            if (e.key === 'Enter' && !sendBtn.disabled) {
                 sendMessage();
             }
         });
@@ -789,7 +819,7 @@
         chatInput.focus();
 
         // Log that page has loaded
-        console.log('Byte Sized Babble loaded successfully!');
+        console.log('Byte Sized Babble loaded successfully with internet search capability!');
     </script>
 </body>
 </html>
