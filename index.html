@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Byte Sized Babble - GCSE & A Level Computer Science & iMedia Revision</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 250px 1fr 350px;
+            gap: 20px;
+            height: calc(100vh - 40px);
+        }
+
+        /* ============ LEFT SIDEBAR - ACCORDION MENU ============ */
+        .sidebar-left {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            overflow-y: auto;
+        }
+
+        .sidebar-left h2 {
+            color: #667eea;
+            font-size: 18px;
+            margin-bottom: 15px;
+            text-align: center;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .accordion {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .accordion-item {
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .accordion-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 15px;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+            user-select: none;
+        }
+
+        .accordion-header:hover {
+            background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+            transform: translateX(5px);
+        }
+
+        .accordion-header .toggle-icon {
+            transition: transform 0.3s ease;
+            font-size: 14px;
+        }
+
+        .accordion-item.active .accordion-header .toggle-icon {
+            transform: rotate(180deg);
+        }
+
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            background: #f8f9fa;
+        }
+
+        .accordion-item.active .accordion-content {
+            max-height: 500px;
+        }
+
+        .accordion-content ul {
+            list-style: none;
+            padding: 10px 0;
+        }
+
+        .accordion-content li {
+            padding: 8px 15px;
+            border-bottom: 1px solid #e0e0e0;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: #333;
+        }
+
+        .accordion-content li:last-child {
+            border-bottom: none;
+        }
+
+        .accordion-content li:hover {
+            background: white;
+            padding-left: 25px;
+            color: #667eea;
+            font-weight: 500;
+        }
+
+        /* ============ CENTER CONTENT ============ */
+        .center-content {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .welcome-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .welcome-section {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .welcome-section h1 {
+            color: #667eea;
+            font-size: 28px;
+            margin-bottom: 15px;
+        }
+
+        .welcome-message {
+            color: #555;
+            line-height: 1.8;
+            font-size: 16px;
+            margin-bottom: 20px;
+            font-style: italic;
+            padding: 20px;
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            border-radius: 8px;
+        }
+
+        .teacher-names {
+            color: #764ba2;
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        /* ============ PODCAST SECTION ============ */
+        .podcast-section {
+            width: 100%;
+            margin-top: 30px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+        }
+
+        .podcast-section h2 {
+            color: #667eea;
+            font-size: 22px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .podcast-section p {
+            color: #555;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .podcast-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 15px;
+        }
+
+        .podcast-link {
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .podcast-link:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        /* ============ RIGHT SIDEBAR - CHATBOT ============ */
+        .sidebar-right {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .chatbot-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            font-weight: 600;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .chatbot-header .status-indicator {
+            width: 10px;
+            height: 10px;
+            background: #4ade80;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .message {
+            display: flex;
+            margin-bottom: 10px;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message.user {
+            justify-content: flex-end;
+        }
+
+        .message.bot {
+            justify-content: flex-start;
+        }
+
+        .message-bubble {
+            max-width: 85%;
+            padding: 10px 15px;
+            border-radius: 12px;
+            font-size: 14px;
+            line-height: 1.4;
+            word-wrap: break-word;
+        }
+
+        .message.user .message-bubble {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-bottom-right-radius: 4px;
+        }
+
+        .message.bot .message-bubble {
+            background: #f0f0f0;
+            color: #333;
+            border-bottom-left-radius: 4px;
+        }
+
+        .chat-input-area {
+            padding: 15px;
+            border-top: 1px solid #e0e0e0;
+            display: flex;
+            gap: 10px;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 10px 12px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            transition: border-color 0.3s ease;
+        }
+
+        .chat-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .send-btn {
+            padding: 10px 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .send-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .send-btn:active {
+            transform: translateY(0);
+        }
+
+        /* ============ SCROLLBAR STYLING ============ */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #667eea;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #764ba2;
+        }
+
+        /* ============ RESPONSIVE ============ */
+        @media (max-width: 1400px) {
+            .container {
+                grid-template-columns: 200px 1fr 300px;
+                gap: 15px;
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .container {
+                grid-template-columns: 1fr;
+                height: auto;
+            }
+
+            .sidebar-left, .sidebar-right {
+                max-height: 400px;
+            }
+
+            .center-content {
+                order: 2;
+            }
+
+            .sidebar-left {
+                order: 1;
+            }
+
+            .sidebar-right {
+                order: 3;
+            }
+        }
+
+        .typing-indicator {
+            display: flex;
+            gap: 4px;
+            padding: 10px 15px;
+            background: #f0f0f0;
+            border-radius: 12px;
+            width: fit-content;
+        }
+
+        .typing-indicator span {
+            width: 8px;
+            height: 8px;
+            background: #999;
+            border-radius: 50%;
+            animation: bounce 1.4s infinite;
+        }
+
+        .typing-indicator span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-indicator span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes bounce {
+            0%, 80%, 100% {
+                opacity: 0.5;
+            }
+            40% {
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- LEFT SIDEBAR - ACCORDION MENU -->
+        <div class="sidebar-left">
+            <h2>📚 Resources</h2>
+            <div class="accordion">
+                <!-- GCSE Computer Science -->
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <span>GCSE Computer Science</span>
+                        <span class="toggle-icon">▼</span>
+                    </div>
+                    <div class="accordion-content">
+                        <ul>
+                            <li>🖥️ Fundamentals of Computing</li>
+                            <li>💾 Data Representation</li>
+                            <li>🔧 Computer Hardware</li>
+                            <li>🌐 Computer Networks</li>
+                            <li>🔐 Cybersecurity</li>
+                            <li>💻 Programming Basics (Python)</li>
+                            <li>🎨 Algorithms & Logic</li>
+                            <li>📊 Data Structures</li>
+                            <li>🔄 Systems Software</li>
+                            <li>📱 Applications Software</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- A Level Computer Science (OCR) -->
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <span>A Level Computer Science</span>
+                        <span class="toggle-icon">▼</span>
+                    </div>
+                    <div class="accordion-content">
+                        <ul>
+                            <li>🏗️ Advanced Computing Fundamentals</li>
+                            <li>🔢 Number Representations</li>
+                            <li>🧠 Computer Processor Architecture</li>
+                            <li>💾 Memory & Storage Systems</li>
+                            <li>🌐 Network Protocols & Security</li>
+                            <li>🔐 Encryption & Hashing</li>
+                            <li>🐍 Advanced Python Programming</li>
+                            <li>🎲 Algorithm Design & Analysis</li>
+                            <li>🌳 Data Structures (Advanced)</li>
+                            <li>📈 Complexity Theory</li>
+                            <li>🤖 Artificial Intelligence</li>
+                            <li>⚙️ System Design Patterns</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Creative iMedia (OCR Cambridge Nationals) -->
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <span>Creative iMedia (OCR)</span>
+                        <span class="toggle-icon">▼</span>
+                    </div>
+                    <div class="accordion-content">
+                        <ul>
+                            <li>🎬 Pre-production Planning</li>
+                            <li>🎨 Design Principles & Theory</li>
+                            <li>📐 Layout & Composition</li>
+                            <li>🎭 Digital Media Assets</li>
+                            <li>📸 Image Manipulation</li>
+                            <li>🎞️ Video Production</li>
+                            <li>🎵 Audio Production</li>
+                            <li>🌐 Web Design & Development</li>
+                            <li>📱 Responsive Design</li>
+                            <li>👥 User Experience (UX)</li>
+                            <li>📊 Analytics & Metrics</li>
+                            <li>🔍 SEO Optimization</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Study Resources -->
+                <div class="accordion-item">
+                    <div class="accordion-header">
+                        <span>Study Tools</span>
+                        <span class="toggle-icon">▼</span>
+                    </div>
+                    <div class="accordion-content">
+                        <ul>
+                            <li>📝 Practice Questions</li>
+                            <li>📋 Study Guides</li>
+                            <li>🧪 Mock Exams</li>
+                            <li>📚 Glossary</li>
+                            <li>🎓 Video Tutorials</li>
+                            <li>💡 Tips & Tricks</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CENTER CONTENT -->
+        <div class="center-content">
+            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300'%3E%3Crect fill='%23f0f0f0' width='400' height='300'/%3E%3Ctext x='50%25' y='50%25' font-size='24' fill='%23999' text-anchor='middle' dominant-baseline='middle'%3EYour Byte Sized Babble Image Here%3C/text%3E%3C/svg%3E" alt="Byte Sized Babble" class="welcome-image" style="max-width: 100%; height: 250px;">
+            
+            <div class="welcome-section">
+                <h1>Welcome to Byte Sized Babble 🎙️</h1>
+                <div class="welcome-message">
+                    <p>Hello! We're <span class="teacher-names">Kathryn and Phill</span>, experienced Computer Science and iMedia teachers. We've created this one-stop resource to support your GCSE Computer Science, A Level Computer Science, and Creative iMedia studies.</p>
+                    <p style="margin-top: 15px;">Whether you're revising for exams, working on coursework, or just trying to understand difficult concepts, Byte Sized Babble is here to guide you every step of the way. Our carefully curated resources, weekly podcast episodes, and interactive AI assistant Byte will help you master these subjects with confidence.</p>
+                </div>
+            </div>
+
+            <!-- PODCAST SECTION -->
+            <div class="podcast-section">
+                <h2>🎧 Weekly Podcast</h2>
+                <p>Subscribe to our weekly podcast where we break down complex concepts into bite-sized episodes. Each week we cover exam techniques, common misconceptions, real-world applications, and student questions.</p>
+                
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 15px;">
+                    <p style="color: #999; text-align: center; font-style: italic;">Subscribe on your favourite platform to never miss an episode:</p>
+                    <div class="podcast-links">
+                        <a href="#" class="podcast-link">🎵 Spotify</a>
+                        <a href="#" class="podcast-link">🎙️ Apple Podcasts</a>
+                        <a href="#" class="podcast-link">▶️ YouTube</a>
+                        <a href="#" class="podcast-link">🔗 RSS Feed</a>
+                    </div>
+                </div>
+
+                <p style="text-align: center; color: #999; font-size: 14px;">
+                    Latest Episode: <strong>Coming Soon</strong>
+                </p>
+            </div>
+        </div>
+
+        <!-- RIGHT SIDEBAR - CHATBOT -->
+        <div class="sidebar-right">
+            <div class="chatbot-header">
+                <span class="status-indicator"></span>
+                <span>Byte - Your AI Assistant</span>
+            </div>
+            <div class="chat-messages" id="chatMessages">
+                <div class="message bot">
+                    <div class="message-bubble">
+                        👋 Hi! I'm Byte, your AI learning assistant. I'm here to help you understand Computer Science and iMedia concepts. Feel free to ask me questions about any topic! Remember: I won't give you direct answers to exam questions, but I'll guide you to understand the concepts and help you find the answer yourself. What would you like to learn about today?
+                    </div>
+                </div>
+            </div>
+            <div class="chat-input-area">
+                <input 
+                    type="text" 
+                    class="chat-input" 
+                    id="chatInput" 
+                    placeholder="Ask Byte a question..."
+                    autocomplete="off"
+                >
+                <button class="send-btn" id="sendBtn">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============ ACCORDION FUNCTIONALITY ============
+        const accordionHeaders = document.querySelectorAll('.accordion-header');
+        
+        accordionHeaders.forEach(header => {
+            header.addEventListener('click', () => {
+                const accordionItem = header.parentElement;
+                const isActive = accordionItem.classList.contains('active');
+                
+                // Close all accordion items
+                document.querySelectorAll('.accordion-item').forEach(item => {
+                    item.classList.remove('active');
+                });
+                
+                // Open clicked item if it wasn't active
+                if (!isActive) {
+                    accordionItem.classList.add('active');
+                }
+            });
+        });
+
+        // ============ CHATBOT FUNCTIONALITY ============
+        const chatInput = document.getElementById('chatInput');
+        const sendBtn = document.getElementById('sendBtn');
+        const chatMessages = document.getElementById('chatMessages');
+
+        // Sample knowledge base for guidance
+        const knowledgeBase = {
+            'python': {
+                guidance: 'Python is a versatile programming language commonly used in computer science education. What specific aspect would you like to understand? For example: variables, loops, functions, or object-oriented programming?',
+                examples: [
+                    'Example 1: Using a for loop to iterate through numbers from 1 to 10',
+                    'Example 2: Creating a function to calculate the sum of two numbers'
+                ]
+            },
+            'algorithm': {
+                guidance: 'Algorithms are step-by-step procedures to solve a problem. Can you describe what problem you\'re trying to solve? That will help me guide you to understand the right approach.',
+                examples: [
+                    'Example: Binary search algorithm for finding elements in a sorted list',
+                    'Example: Bubble sort algorithm for arranging numbers in order'
+                ]
+            },
+            'data structure': {
+                guidance: 'Data structures are ways to organize and store data efficiently. Common ones include arrays, linked lists, stacks, and queues. Which one would you like to explore?',
+                examples: [
+                    'Example: Using an array to store a list of student names',
+                    'Example: Using a stack data structure to implement an undo function'
+                ]
+            },
+            'network': {
+                guidance: 'Computer networks allow devices to communicate. Let me guide you through the key concepts. Are you interested in: TCP/IP protocols, DNS, HTTP, or security?',
+                examples: [
+                    'Example: How data travels from your computer to a web server',
+                    'Example: How DNS translates domain names to IP addresses'
+                ]
+            },
+            'security': {
+                guidance: 'Cybersecurity is crucial in today\'s digital world. What aspect interests you? Encryption, authentication, firewalls, or common threats?',
+                examples: [
+                    'Example: How encryption protects your passwords',
+                    'Example: How two-factor authentication adds extra security'
+                ]
+            },
+            'design': {
+                guidance: 'Design principles in iMedia help create engaging user experiences. Are you interested in: layout, color theory, typography, or user interface design?',
+                examples: [
+                    'Example: How to use the rule of thirds in composition',
+                    'Example: Color psychology in website design'
+                ]
+            },
+            'html': {
+                guidance: 'HTML is the structure of web pages. What would you like to understand? Tags, elements, semantic HTML, or how to structure a page?',
+                examples: [
+                    'Example: Creating headings, paragraphs, and lists with HTML tags',
+                    'Example: Understanding semantic tags like <header>, <nav>, <article>'
+                ]
+            },
+            'css': {
+                guidance: 'CSS is used to style web pages. Are you interested in: selectors, properties, layouts, or responsive design?',
+                examples: [
+                    'Example: Using CSS to center text and change colors',
+                    'Example: Creating responsive layouts with CSS Flexbox or Grid'
+                ]
+            },
+            'default': {
+                guidance: 'Great question! To help guide you better, could you provide more details about what you\'re trying to understand? Are you working on GCSE, A Level, or iMedia coursework?',
+                examples: [
+                    'Try asking about specific topics from the menu on the left',
+                    'Describe the problem or concept you\'re struggling with'
+                ]
+            }
+        };
+
+        function addMessage(text, isUser = false) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${isUser ? 'user' : 'bot'}`;
+            
+            const bubbleDiv = document.createElement('div');
+            bubbleDiv.className = 'message-bubble';
+            bubbleDiv.textContent = text;
+            
+            messageDiv.appendChild(bubbleDiv);
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function addTypingIndicator() {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message bot';
+            messageDiv.id = 'typingIndicator';
+            
+            const bubbleDiv = document.createElement('div');
+            bubbleDiv.className = 'typing-indicator';
+            bubbleDiv.innerHTML = '<span></span><span></span><span></span>';
+            
+            messageDiv.appendChild(bubbleDiv);
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function removeTypingIndicator() {
+            const typingIndicator = document.getElementById('typingIndicator');
+            if (typingIndicator) {
+                typingIndicator.remove();
+            }
+        }
+
+        function getByteResponse(userMessage) {
+            const lowerMessage = userMessage.toLowerCase();
+            
+            // Check which knowledge area matches
+            let response = knowledgeBase.default.guidance;
+            let examples = knowledgeBase.default.examples;
+            
+            for (const [key, value] of Object.entries(knowledgeBase)) {
+                if (key !== 'default' && lowerMessage.includes(key)) {
+                    response = value.guidance;
+                    examples = value.examples;
+                    break;
+                }
+            }
+            
+            // Check for answer verification keywords
+            if (lowerMessage.includes('is this correct') || lowerMessage.includes('is my answer') || lowerMessage.includes('did i get this right')) {
+                response = 'I\'d be happy to help you check your understanding! Please share your answer, and I\'ll guide you through the reasoning to verify if you\'re on the right track. Remember, I\'m here to help you learn, not just give answers.';
+            }
+            
+            // Check for coursework help
+            if (lowerMessage.includes('coursework') || lowerMessage.includes('homework')) {
+                response = 'I\'d love to help with your coursework! However, I won\'t write it for you - that wouldn\'t help you learn. Instead, I can: guide you through the concepts, help you understand the requirements, suggest similar examples, and point you in the right direction. What specific part are you working on?';
+            }
+            
+            return { response, examples };
+        }
+
+        function sendMessage() {
+            const message = chatInput.value.trim();
+            
+            if (message === '') return;
+            
+            // Add user message
+            addMessage(message, true);
+            chatInput.value = '';
+            
+            // Show typing indicator
+            addTypingIndicator();
+            
+            // Simulate API call delay
+            setTimeout(() => {
+                removeTypingIndicator();
+                
+                const { response, examples } = getByteResponse(message);
+                addMessage(response);
+                
+                // Add example after a short delay
+                setTimeout(() => {
+                    if (examples && examples.length > 0) {
+                        const randomExample = examples[Math.floor(Math.random() * examples.length)];
+                        addMessage(randomExample);
+                    }
+                }, 500);
+            }, 1000);
+        }
+
+        sendBtn.addEventListener('click', sendMessage);
+        chatInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        // Set initial focus on chat input
+        chatInput.focus();
+
+        // Log that page has loaded
+        console.log('Byte Sized Babble loaded successfully!');
+    </script>
+</body>
+</html>
